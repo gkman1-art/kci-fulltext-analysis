@@ -102,14 +102,23 @@
   </div>
 
   <div class="card">
-    <h2>상업 DB별 원문 제공 학술지 수 (RISS 기준)</h2>
-    <p class="desc">RISS 검색 결과 해당 상업 DB가 원문 제공처로 확인된 학술지 수 (학술지당 1개 DB만 집계 — 복수 DB 제공 시 RISS에 표시된 첫 번째 DB 기준)</p>
+    <h2>방법 A — RISS 기준 제공처 배정 (학술지당 1곳)</h2>
+    <p class="desc">비공개 학술지 각각의 최근 논문을 RISS에서 검색하여, RISS에 표시된 원문 제공처를 1곳만 배정한 결과. 동일 학술지가 여러 DB에 수록되어 있더라도, RISS에서 먼저 표시된 1곳만 집계됩니다. 5개 상업 DB(DBPIA, KISS, 스콜라, earticle, 코리아스칼라) 대상.</p>
     <div class="chart-wrap"><canvas id="commercialBar"></canvas></div>
   </div>
 
+  <div class="card" style="background: #fffde7; border-left: 4px solid #f39c12;">
+    <h2 style="font-size:14px; border: none; margin-bottom: 8px;">방법 A와 방법 B의 숫자가 다른 이유</h2>
+    <p style="font-size: 13px; color: #555; margin: 0;">
+      <b>방법 A (RISS 기준)</b>는 학술지당 1개 DB만 배정하므로, 실제로는 DBPIA에 수록되어 있어도 RISS에서 KCI 무료 원문이 먼저 표시되면 KCI로 배정됩니다. 또한 5개 상업 DB를 모두 포함합니다.<br>
+      <b>방법 B (DB 목록 대조)</b>는 각 DB의 실제 수록 목록을 독립적으로 대조하여, 한 학술지가 여러 DB에 수록된 경우를 모두 반영합니다. 현재 DBPIA, KISS, earticle 3개 DB만 대조가 완료되어 스콜라·코리아스칼라는 미포함입니다.<br>
+      따라서 방법 B의 개별 DB 숫자가 방법 A보다 크며, 이는 오류가 아니라 집계 방식의 차이입니다.
+    </p>
+  </div>
+
   <div class="card">
-    <h2>상업 DB별 실제 수록 현황: 독점 vs 비독점</h2>
-    <p class="desc">각 상업 DB의 공개 학술지 목록 정보를 토대로 KCI 비공개 학술지의 수록 여부를 대조한 결과. '독점'은 3대 DB 중 1곳에서만 확인된 학술지, '비독점'은 2곳 이상에서 확인된 학술지</p>
+    <h2>방법 B — DB 목록 직접 대조: 독점 vs 비독점 (3대 DB)</h2>
+    <p class="desc">DBPIA·KISS·earticle 3개 DB의 공개 학술지 목록을 독립적으로 대조하여, 한 학술지가 실제 수록된 모든 DB를 파악한 결과. '독점'은 3대 DB 중 1곳에서만 확인, '비독점'은 2곳 이상 확인. 스콜라·코리아스칼라는 대조 미완료로 미포함.</p>
     <div class="grid-2">
       <div class="chart-wrap"><canvas id="crossCheckBar"></canvas></div>
       <div>
@@ -173,7 +182,8 @@
         <li>비공개 학술지의 최근 논문을 RISS 공개 검색 서비스를 통해 원문 제공처 확인 (상업 DB, 공공 DB, 미확인으로 구분)</li>
         <li>RISS 미연계 학술지는 논문 제목 및 학술지명으로 RISS 검색하여 2차 확인</li>
         <li>2024년 발행 논문 기준으로 제공처 변동 여부 교차 검증</li>
-        <li>각 상업 DB가 공개하는 학술지 목록 정보를 토대로, KCI 비공개 학술지의 복수 DB 수록 여부를 대조 → 독점/비독점 분류</li>
+        <li><b>방법 B:</b> DBPIA·KISS·earticle 3개 DB의 공개 학술지 목록과 KCI 비공개 학술지를 독립 대조하여 복수 DB 수록 여부 파악 → 독점/비독점 분류 (스콜라·코리아스칼라 미완료)</li>
+        <li>방법 A(RISS 기준)는 학술지당 1개 제공처만 배정하고, 방법 B(DB 목록 대조)는 실제 수록된 모든 DB를 반영하므로 개별 DB의 숫자가 다를 수 있음</li>
         <li>※ '비공개'는 KCI 포털에서 원문을 직접 제공하지 않는다는 의미이며, 공공 DB(RISS, ScienceON 등)나 상업 DB를 통해 원문에 접근할 수 있는 경우를 포함합니다</li>
       </ol>
     </div>
