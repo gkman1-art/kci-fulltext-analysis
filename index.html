@@ -75,7 +75,7 @@
       </div>
       <div class="stat-box">
         <div class="num" style="color:#e74c3c">795</div>
-        <div class="label">상업 DB 의존 (61.4%)</div>
+        <div class="label">비공개 중 상업 DB (61.4%)</div>
       </div>
       <div class="stat-box">
         <div class="num" style="color:#f39c12">33.4%</div>
@@ -87,7 +87,7 @@
   <!-- 2. 대분류별 원문 공개/비공개 -->
   <div class="card">
     <h2>학문 대분류별 원문 공개 현황</h2>
-    <p class="desc">전체 등재 학술지 중 원문 비공개 비율 — 비공개 비율이 높을수록 유료 DB 의존도가 높은 분야</p>
+    <p class="desc">전체 등재 학술지 중 원문 비공개 비율 — '비공개'란 KCI에서 원문을 직접 제공하지 않는 학술지(공공·상업 DB에서는 제공될 수 있음)</p>
     <div class="chart-wide"><canvas id="overviewBar"></canvas></div>
   </div>
 
@@ -108,7 +108,7 @@
 
   <div class="card">
     <h2>학문 대분류별 상업 DB 의존도</h2>
-    <p class="desc">원문 비공개 학술지 중 상업 DB가 원문을 독점 제공하는 비율 (%)</p>
+    <p class="desc">원문 비공개 학술지 중 상업 DB에서 원문이 확인된 비율 (%) — 나머지는 공공 DB 제공 또는 미확인</p>
     <div class="chart-wide"><canvas id="majorDepBar"></canvas></div>
   </div>
 
@@ -147,9 +147,10 @@
       <ol>
         <li>KCI 포털에서 등재/우수등재 학술지 전체 목록 수집 (등재후보 제외)</li>
         <li>원문 공개 여부(articleOpen) 기준으로 공개/비공개 분류</li>
-        <li>비공개 학술지의 최근 논문을 KCI→RISS 연계 검색하여 실제 원문 제공처(상업 DB) 확인</li>
+        <li>비공개 학술지의 최근 논문을 KCI→RISS 연계 검색하여 실제 원문 제공처 확인 (상업 DB, 공공 DB, 미확인으로 구분)</li>
         <li>RISS 미연계 학술지는 논문 제목 및 학술지명으로 RISS 직접 검색하여 2차 확인</li>
         <li>2024년 발행 논문으로 제공처 변동 여부 교차 검증</li>
+        <li>※ '비공개'는 KCI 포털에서 원문을 직접 제공하지 않는다는 의미이며, 공공 DB(RISS, ScienceON 등)나 상업 DB를 통해 원문에 접근할 수 있는 경우를 포함합니다</li>
       </ol>
     </div>
   </div>
