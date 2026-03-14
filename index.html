@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KCI 등재 학술지 원문 접근성 분석</title>
+<meta name="description" content="KCI 등재 학술지 2,382종의 원문 공개/비공개 현황과 상업 DB 의존도 전수조사 결과">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Pretendard', -apple-system, 'Noto Sans KR', sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+  h1 { text-align: center; margin: 30px 0 10px; font-size: 26px; color: #1a1a2e; }
+  .subtitle { text-align: center; color: #666; margin-bottom: 10px; font-size: 14px; }
+  .meta { text-align: center; color: #999; font-size: 12px; margin-bottom: 30px; }
+  .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .card h2 { font-size: 17px; color: #1a1a2e; margin-bottom: 16px; border-bottom: 2px solid #e8e8e8; padding-bottom: 8px; }
+  .card p.desc { font-size: 13px; color: #666; margin: -8px 0 16px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .stat-box { text-align: center; padding: 16px 8px; background: #f8f9fa; border-radius: 8px; }
+  .stat-box .num { font-size: 28px; font-weight: 700; color: #1a1a2e; }
+  .stat-box .label { font-size: 11px; color: #666; margin-top: 4px; }
+  .chart-wrap { position: relative; max-height: 400px; }
+  .chart-wide { position: relative; height: 450px; }
+  .chart-tall { position: relative; height: 700px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+  th { background: #f0f0f0; padding: 7px 8px; text-align: left; font-weight: 600; position: sticky; top: 0; z-index: 1; }
+  td { padding: 5px 8px; border-bottom: 1px solid #eee; }
+  tr:hover td { background: #f8f9fa; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .badge.high { background: #fde8e8; color: #c0392b; }
+  .badge.mid { background: #fef3e2; color: #e67e22; }
+  .badge.low { background: #e8f8f0; color: #27ae60; }
+  .toggle-btn { background: #eee; border: none; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; margin: 3px; }
+  .toggle-btn.active { background: #1a1a2e; color: white; }
+  .scroll-box { max-height: 450px; overflow-y: auto; }
+  .highlight { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; }
+  .highlight .stat-box { background: rgba(255,255,255,0.1); }
+  .highlight .stat-box .num { color: white; }
+  .highlight .stat-box .label { color: rgba(255,255,255,0.7); }
+  .highlight h2 { color: white; border-bottom-color: rgba(255,255,255,0.2); }
+  .method { background: #f8f9fa; border-radius: 8px; padding: 16px; margin-top: 12px; font-size: 13px; }
+  .method h3 { font-size: 14px; margin-bottom: 8px; }
+  .method ol { padding-left: 20px; }
+  .method li { margin-bottom: 4px; }
+  footer { text-align: center; padding: 30px 0; color: #999; font-size: 12px; }
+  footer a { color: #666; }
+  @media (max-width: 768px) { .grid-2, .grid-3, .grid-5 { grid-template-columns: 1fr; } h1 { font-size: 20px; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>KCI 등재 학술지 원문 접근성 전수조사</h1>
+  <p class="subtitle">한국학술지인용색인(KCI) 등재/우수등재 학술지 원문의 공개 현황과 상업 DB 의존도 분석</p>
+  <p class="meta">분석일: 2025년 3월 | 데이터 출처: KCI, RISS | 등재후보 제외</p>
+
+  <!-- 1. 전체 현황 -->
+  <div class="card highlight">
+    <h2>전체 현황</h2>
+    <div class="grid-5">
+      <div class="stat-box">
+        <div class="num">2,382</div>
+        <div class="label">등재 학술지 전체</div>
+      </div>
+      <div class="stat-box">
+        <div class="num" style="color:#2ecc71">1,087</div>
+        <div class="label">원문 공개 (45.6%)</div>
+      </div>
+      <div class="stat-box">
+        <div class="num" style="color:#e74c3c">1,295</div>
+        <div class="label">원문 비공개 (54.4%)</div>
+      </div>
+      <div class="stat-box">
+        <div class="num" style="color:#e74c3c">795</div>
+        <div class="label">상업 DB 의존 (61.4%)</div>
+      </div>
+      <div class="stat-box">
+        <div class="num" style="color:#f39c12">33.4%</div>
+        <div class="label">전체 대비 상업 DB</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 대분류별 원문 공개/비공개 -->
+  <div class="card">
+    <h2>학문 대분류별 원문 공개 현황</h2>
+    <p class="desc">전체 등재 학술지 중 원문 비공개 비율 — 비공개 비율이 높을수록 유료 DB 의존도가 높은 분야</p>
+    <div class="chart-wide"><canvas id="overviewBar"></canvas></div>
+  </div>
+
+  <!-- 3. 비공개 학술지 제공처 분석 -->
+  <div class="card">
+    <h2>원문 비공개 1,295종: 제공처는 어디인가</h2>
+    <p class="desc">KCI에서 원문을 공개하지 않는 학술지의 원문을 실제로 제공하는 DB</p>
+    <div class="grid-2">
+      <div class="chart-wrap"><canvas id="providerPie"></canvas></div>
+      <div class="chart-wrap"><canvas id="categoryPie"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>상업 DB별 학술지 수</h2>
+    <div class="chart-wrap"><canvas id="commercialBar"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>학문 대분류별 상업 DB 의존도</h2>
+    <p class="desc">원문 비공개 학술지 중 상업 DB가 원문을 독점 제공하는 비율 (%)</p>
+    <div class="chart-wide"><canvas id="majorDepBar"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>대분류별 제공처 구성</h2>
+    <div class="chart-wide"><canvas id="majorStacked"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>대분류별 상업 DB 상세</h2>
+    <table id="majorTable">
+      <thead><tr><th>대분류</th><th>비공개</th><th>DBPIA</th><th>KISS</th><th>스콜라</th><th>earticle</th><th>코리아스칼라</th><th>상업계</th><th>KCI등</th><th>기타공공</th><th>상업비율</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>소분류별 상세</h2>
+    <div id="majorButtons" style="margin-bottom:10px"></div>
+    <div class="scroll-box" id="minorContent"></div>
+  </div>
+
+  <div class="card">
+    <h2>소분류 Top 40: 상업 DB 의존도 (3종 이상)</h2>
+    <div class="chart-tall"><canvas id="minorTopBar"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>소분류별 상업 DB 점유 히트맵</h2>
+    <div class="scroll-box" id="heatmapContent"></div>
+  </div>
+
+  <div class="card">
+    <h2>조사 방법</h2>
+    <div class="method">
+      <ol>
+        <li>KCI 포털에서 등재/우수등재 학술지 전체 목록 수집 (등재후보 제외)</li>
+        <li>원문 공개 여부(articleOpen) 기준으로 공개/비공개 분류</li>
+        <li>비공개 학술지의 최근 논문을 KCI→RISS 연계 검색하여 실제 원문 제공처(상업 DB) 확인</li>
+        <li>RISS 미연계 학술지는 논문 제목 및 학술지명으로 RISS 직접 검색하여 2차 확인</li>
+        <li>2024년 발행 논문으로 제공처 변동 여부 교차 검증</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<footer>
+  데이터 출처: <a href="https://www.kci.go.kr" target="_blank">KCI</a>, <a href="https://www.riss.kr" target="_blank">RISS</a>
+</footer>
+
+<script>
+const DATA = {"totalRegistered":2382,"totalOpen":1087,"totalClosed":1295,"totalAnalyzed":1295,"overviewData":[{"name":"미분류","total":1087,"open":1087,"closed":0,"closedPct":0},{"name":"사회과학","total":435,"open":0,"closed":435,"closedPct":100},{"name":"인문학","total":249,"open":0,"closed":249,"closedPct":100},{"name":"의약학","total":177,"open":0,"closed":177,"closedPct":100},{"name":"공학","total":160,"open":0,"closed":160,"closedPct":100},{"name":"예술체육학","total":81,"open":0,"closed":81,"closedPct":100},{"name":"자연과학","total":76,"open":0,"closed":76,"closedPct":100},{"name":"복합학","total":67,"open":0,"closed":67,"closedPct":100},{"name":"농수해양학","total":49,"open":0,"closed":49,"closedPct":100},{"name":"","total":1,"open":0,"closed":1,"closedPct":100}],"providerTotals":[["KCI",462],["DBPIA",251],["KISS",218],["스콜라",214],["earticle",87],["ScienceON",29],["코리아스칼라",25],["RISS",7],["KoreaMed",1],["기초학문자료센터",1]],"majorCategories":[{"name":"사회과학","total":435,"providers":[["KCI",121],["스콜라",101],["DBPIA",88],["KISS",75],["earticle",37],["RISS",6],["코리아스칼라",4],["ScienceON",3]],"commercialCount":305,"publicCount":130,"errorCount":0,"minors":[{"name":"교육학","total":80,"providers":[["스콜라",35],["KCI",15],["DBPIA",10],["KISS",9],["earticle",7],["RISS",3],["코리아스칼라",1]],"commercialCount":62,"publicCount":18,"errorCount":0},{"name":"법학","total":63,"providers":[["DBPIA",20],["스콜라",14],["KCI",11],["KISS",10],["earticle",5],["코리아스칼라",2],["RISS",1]],"commercialCount":51,"publicCount":12,"errorCount":0},{"name":"경영학","total":44,"providers":[["KCI",14],["DBPIA",12],["KISS",6],["earticle",5],["스콜라",5],["RISS",1],["ScienceON",1]],"commercialCount":28,"publicCount":16,"errorCount":0},{"name":"사회과학일반","total":39,"providers":[["KCI",14],["스콜라",9],["DBPIA",7],["KISS",6],["earticle",3]],"commercialCount":25,"publicCount":14,"errorCount":0},{"name":"경제학","total":24,"providers":[["KISS",11],["KCI",7],["스콜라",4],["ScienceON",2]],"commercialCount":15,"publicCount":9,"errorCount":0},{"name":"정치외교학","total":23,"providers":[["KCI",9],["KISS",6],["DBPIA",4],["스콜라",2],["earticle",1],["RISS",1]],"commercialCount":13,"publicCount":10,"errorCount":0},{"name":"지역학","total":22,"providers":[["KCI",6],["earticle",5],["DBPIA",5],["KISS",4],["스콜라",2]],"commercialCount":16,"publicCount":6,"errorCount":0},{"name":"사회복지학","total":19,"providers":[["DBPIA",7],["스콜라",6],["KCI",3],["KISS",2],["earticle",1]],"commercialCount":16,"publicCount":3,"errorCount":0},{"name":"사회학","total":16,"providers":[["DBPIA",5],["KCI",4],["KISS",4],["스콜라",3]],"commercialCount":12,"publicCount":4,"errorCount":0},{"name":"행정학","total":16,"providers":[["KCI",6],["earticle",3],["스콜라",3],["KISS",2],["DBPIA",2]],"commercialCount":10,"publicCount":6,"errorCount":0},{"name":"신문방송학","total":13,"providers":[["DBPIA",9],["KCI",4]],"commercialCount":9,"publicCount":4,"errorCount":0},{"name":"국제/지역개발","total":10,"providers":[["KCI",4],["스콜라",3],["KISS",2],["earticle",1]],"commercialCount":6,"publicCount":4,"errorCount":0},{"name":"심리과학","total":10,"providers":[["스콜라",4],["KISS",3],["earticle",2],["KCI",1]],"commercialCount":9,"publicCount":1,"errorCount":0},{"name":"기타사회과학","total":9,"providers":[["KCI",4],["스콜라",3],["earticle",1],["KISS",1]],"commercialCount":5,"publicCount":4,"errorCount":0},{"name":"무역학","total":8,"providers":[["KCI",3],["KISS",2],["DBPIA",2],["스콜라",1]],"commercialCount":5,"publicCount":3,"errorCount":0},{"name":"회계학","total":8,"providers":[["스콜라",4],["KCI",3],["KISS",1]],"commercialCount":5,"publicCount":3,"errorCount":0},{"name":"정책학","total":8,"providers":[["KCI",4],["DBPIA",2],["KISS",2]],"commercialCount":4,"publicCount":4,"errorCount":0},{"name":"관광학","total":7,"providers":[["KCI",4],["스콜라",2],["KISS",1]],"commercialCount":3,"publicCount":4,"errorCount":0},{"name":"지리학","total":6,"providers":[["KCI",3],["코리아스칼라",1],["KISS",1],["DBPIA",1]],"commercialCount":3,"publicCount":3,"errorCount":0},{"name":"군사학","total":5,"providers":[["earticle",2],["KISS",1],["DBPIA",1],["KCI",1]],"commercialCount":4,"publicCount":1,"errorCount":0},{"name":"농업경제학","total":3,"providers":[["KISS",1],["스콜라",1],["KCI",1]],"commercialCount":2,"publicCount":1,"errorCount":0},{"name":"인류학","total":2,"providers":[["DBPIA",1],["earticle",1]],"commercialCount":2,"publicCount":0,"errorCount":0}]},{"name":"인문학","total":249,"providers":[["KISS",59],["DBPIA",57],["KCI",55],["스콜라",53],["earticle",18],["코리아스칼라",5],["RISS",1],["기초학문자료센터",1]],"commercialCount":192,"publicCount":57,"errorCount":0,"minors":[{"name":"역사학","total":55,"providers":[["DBPIA",15],["스콜라",14],["KISS",12],["KCI",7],["earticle",5],["기초학문자료센터",1],["코리아스칼라",1]],"commercialCount":47,"publicCount":8,"errorCount":0},{"name":"기타인문학","total":52,"providers":[["KCI",15],["DBPIA",12],["스콜라",11],["KISS",8],["earticle",5],["RISS",1]],"commercialCount":36,"publicCount":16,"errorCount":0},{"name":"한국어와문학","total":34,"providers":[["KISS",12],["DBPIA",9],["스콜라",7],["KCI",4],["earticle",2]],"commercialCount":30,"publicCount":4,"errorCount":0},{"name":"철학","total":23,"providers":[["KISS",9],["KCI",5],["스콜라",4],["DBPIA",3],["earticle",1],["코리아스칼라",1]],"commercialCount":18,"publicCount":5,"errorCount":0},{"name":"영어와문학","total":19,"providers":[["스콜라",9],["KISS",5],["KCI",3],["DBPIA",2]],"commercialCount":16,"publicCount":3,"errorCount":0},{"name":"기독교신학","total":13,"providers":[["KCI",7],["DBPIA",3],["earticle",1],["KISS",1],["코리아스칼라",1]],"commercialCount":6,"publicCount":7,"errorCount":0},{"name":"언어학","total":12,"providers":[["KCI",6],["스콜라",2],["DBPIA",2],["KISS",1],["코리아스칼라",1]],"commercialCount":6,"publicCount":6,"errorCount":0},{"name":"종교학","total":9,"providers":[["DBPIA",3],["KCI",3],["스콜라",2],["KISS",1]],"commercialCount":6,"publicCount":3,"errorCount":0},{"name":"중국어와문학","total":6,"providers":[["DBPIA",2],["KCI",1],["스콜라",1],["코리아스칼라",1],["KISS",1]],"commercialCount":5,"publicCount":1,"errorCount":0},{"name":"불교학","total":5,"providers":[["KISS",3],["스콜라",1],["DBPIA",1]],"commercialCount":5,"publicCount":0,"errorCount":0},{"name":"일본어와문학","total":4,"providers":[["earticle",2],["DBPIA",1],["KISS",1]],"commercialCount":4,"publicCount":0,"errorCount":0},{"name":"문학","total":4,"providers":[["KCI",2],["KISS",1],["DBPIA",1]],"commercialCount":2,"publicCount":2,"errorCount":0},{"name":"러시아어와문학","total":4,"providers":[["스콜라",2],["DBPIA",1],["KCI",1]],"commercialCount":3,"publicCount":1,"errorCount":0},{"name":"가톨릭신학","total":3,"providers":[["DBPIA",2],["earticle",1]],"commercialCount":3,"publicCount":0,"errorCount":0},{"name":"독일어와문학","total":2,"providers":[["KISS",2]],"commercialCount":2,"publicCount":0,"errorCount":0},{"name":"유교학","total":2,"providers":[["KCI",1],["KISS",1]],"commercialCount":1,"publicCount":1,"errorCount":0},{"name":"기타동양어문학","total":1,"providers":[["earticle",1]],"commercialCount":1,"publicCount":0,"errorCount":0},{"name":"인문학 &gt; 역사학","total":1,"providers":[["KISS",1]],"commercialCount":1,"publicCount":0,"errorCount":0}]},{"name":"의약학","total":177,"providers":[["KCI",102],["KISS",27],["스콜라",23],["DBPIA",10],["earticle",7],["ScienceON",5],["코리아스칼라",2],["KoreaMed",1]],"commercialCount":69,"publicCount":108,"errorCount":0,"minors":[{"name":"간호학","total":15,"providers":[["DBPIA",5],["KCI",4],["KISS",3],["스콜라",2],["earticle",1]],"commercialCount":11,"publicCount":4,"errorCount":0},{"name":"의학일반","total":15,"providers":[["KCI",11],["스콜라",2],["KISS",2]],"commercialCount":4,"publicCount":11,"errorCount":0},{"name":"내과학","total":12,"providers":[["KISS",6],["KCI",6]],"commercialCount":6,"publicCount":6,"errorCount":0},{"name":"한의학","total":12,"providers":[["KCI",5],["KISS",4],["스콜라",2],["ScienceON",1]],"commercialCount":6,"publicCount":6,"errorCount":0},{"name":"예방의학/직업환경의학","total":11,"providers":[["KCI",6],["KISS",4],["ScienceON",1]],"commercialCount":4,"publicCount":7,"errorCount":0},{"name":"치의학","total":10,"providers":[["KCI",5],["KISS",1],["ScienceON",1],["스콜라",1],["earticle",1],["DBPIA",1]],"commercialCount":4,"publicCount":6,"errorCount":0},{"name":"일반외과학","total":9,"providers":[["KCI",9]],"commercialCount":0,"publicCount":9,"errorCount":0},{"name":"약학","total":8,"providers":[["KCI",3],["DBPIA",2],["KoreaMed",1],["스콜라",1],["earticle",1]],"commercialCount":4,"publicCount":4,"errorCount":0},{"name":"정형외과학","total":7,"providers":[["KCI",5],["KISS",1],["DBPIA",1]],"commercialCount":2,"publicCount":5,"errorCount":0},{"name":"물리치료학","total":7,"providers":[["스콜라",2],["KCI",2],["KISS",1],["earticle",1],["코리아스칼라",1]],"commercialCount":5,"publicCount":2,"errorCount":0},{"name":"방사선과학","total":6,"providers":[["KCI",5],["스콜라",1]],"commercialCount":1,"publicCount":5,"errorCount":0},{"name":"작업치료학","total":6,"providers":[["earticle",2],["KISS",2],["스콜라",1],["KCI",1]],"commercialCount":5,"publicCount":1,"errorCount":0},{"name":"정신과학","total":6,"providers":[["KCI",3],["스콜라",2],["DBPIA",1]],"commercialCount":3,"publicCount":3,"errorCount":0},{"name":"수의학","total":6,"providers":[["KCI",4],["스콜라",1],["ScienceON",1]],"commercialCount":1,"publicCount":5,"errorCount":0},{"name":"신경외과학","total":5,"providers":[["KCI",4],["스콜라",1]],"commercialCount":1,"publicCount":4,"errorCount":0},{"name":"성형외과학","total":5,"providers":[["KCI",3],["스콜라",2]],"commercialCount":2,"publicCount":3,"errorCount":0},{"name":"신경과학","total":5,"providers":[["KCI",4],["스콜라",1]],"commercialCount":1,"publicCount":4,"errorCount":0},{"name":"가정의학","total":5,"providers":[["KCI",4],["스콜라",1]],"commercialCount":1,"publicCount":4,"errorCount":0},{"name":"비뇨기과학","total":3,"providers":[["KCI",3]],"commercialCount":0,"publicCount":3,"errorCount":0},{"name":"재활의학","total":3,"providers":[["earticle",1],["스콜라",1],["KCI",1]],"commercialCount":2,"publicCount":1,"errorCount":0},{"name":"마취과학","total":3,"providers":[["KCI",3]],"commercialCount":0,"publicCount":3,"errorCount":0},{"name":"약리학","total":2,"providers":[["KCI",2]],"commercialCount":0,"publicCount":2,"errorCount":0},{"name":"임상병리학","total":2,"providers":[["KCI",2]],"commercialCount":0,"publicCount":2,"errorCount":0},{"name":"기타의약학","total":2,"providers":[["코리아스칼라",1],["KCI",1]],"commercialCount":1,"publicCount":1,"errorCount":0},{"name":"피부과학","total":2,"providers":[["KISS",2]],"commercialCount":2,"publicCount":0,"errorCount":0},{"name":"안과학","total":2,"providers":[["KCI",1],["스콜라",1]],"commercialCount":1,"publicCount":1,"errorCount":0},{"name":"이비인후과학","total":1,"providers":[["KCI",1]],"commercialCount":0,"publicCount":1,"errorCount":0},{"name":"해부학","total":1,"providers":[["스콜라",1]],"commercialCount":1,"publicCount":0,"errorCount":0},{"name":"흉부외과학","total":1,"providers":[["KCI",1]],"commercialCount":0,"publicCount":1,"errorCount":0},{"name":"생리학","total":1,"providers":[["KCI",1]],"commercialCount":0,"publicCount":1,"errorCount":0},{"name":"소아과학","total":1,"providers":[["ScienceON",1]],"commercialCount":0,"publicCount":1,"errorCount":0},{"name":"병리학","total":1,"providers":[["KCI",1]],"commercialCount":0,"publicCount":1,"errorCount":0},{"name":"산부인과학","total":1,"providers":[["KISS",1]],"commercialCount":1,"publicCount":0,"errorCount":0},{"name":"응급의학","total":1,"providers":[["KCI",1]],"commercialCount":0,"publicCount":1,"errorCount":0}]},{"name":"공학","total":160,"providers":[["KCI",76],["DBPIA",46],["KISS",17],["ScienceON",8],["스콜라",7],["earticle",3],["코리아스칼라",3]],"commercialCount":76,"publicCount":84,"errorCount":0,"minors":[{"name":"기계공학","total":20,"providers":[["DBPIA",12],["KCI",7],["KISS",1]],"commercialCount":13,"publicCount":7,"errorCount":0},{"name":"전기공학","total":14,"providers":[["KCI",8],["DBPIA",3],["earticle",1],["KISS",1],["ScienceON",1]],"commercialCount":5,"publicCount":9,"errorCount":0},{"name":"전자/정보통신공학","total":12,"providers":[["KCI",8],["DBPIA",4]],"commercialCount":4,"publicCount":8,"errorCount":0},{"name":"토목공학","total":12,"providers":[["KCI",6],["DBPIA",5],["스콜라",1]],"commercialCount":6,"publicCount":6,"errorCount":0},{"name":"건축공학","total":11,"providers":[["KCI",5],["ScienceON",2],["DBPIA",2],["KISS",1],["earticle",1]],"commercialCount":4,"publicCount":7,"errorCount":0},{"name":"공학일반","total":10,"providers":[["KCI",4],["DBPIA",3],["스콜라",1],["KISS",1],["ScienceON",1]],"commercialCount":5,"publicCount":5,"errorCount":0},{"name":"산업공학","total":9,"providers":[["DBPIA",5],["KISS",2],["KCI",1],["ScienceON",1]],"commercialCount":7,"publicCount":2,"errorCount":0},{"name":"컴퓨터학","total":8,"providers":[["KCI",5],["DBPIA",3]],"commercialCount":3,"publicCount":5,"errorCount":0},{"name":"기타공학","total":7,"providers":[["스콜라",2],["KCI",2],["DBPIA",2],["KISS",1]],"commercialCount":5,"publicCount":2,"errorCount":0},{"name":"환경공학","total":7,"providers":[["KISS",4],["KCI",2],["코리아스칼라",1]],"commercialCount":5,"publicCount":2,"errorCount":0},{"name":"항공우주공학","total":6,"providers":[["KCI",5],["DBPIA",1]],"commercialCount":1,"publicCount":5,"errorCount":0},{"name":"화학공학","total":5,"providers":[["KCI",2],["코리아스칼라",1],["KISS",1],["ScienceON",1]],"commercialCount":2,"publicCount":3,"errorCount":0},{"name":"자원공학","total":5,"providers":[["KCI",3],["KISS",2]],"commercialCount":2,"publicCount":3,"errorCount":0},{"name":"의공학","total":5,"providers":[["KCI",4],["코리아스칼라",1]],"commercialCount":1,"publicCount":4,"errorCount":0},{"name":"원자력공학","total":4,"providers":[["스콜라",1],["earticle",1],["KISS",1],["DBPIA",1]],"commercialCount":4,"publicCount":0,"errorCount":0},{"name":"재료공학","total":4,"providers":[["ScienceON",2],["KCI",2]],"commercialCount":0,"publicCount":4,"errorCount":0},{"name":"고분자공학","total":4,"providers":[["KCI",2],["DBPIA",1],["KISS",1]],"commercialCount":2,"publicCount":2,"errorCount":0},{"name":"안전공학","total":3,"providers":[["스콜라",2],["KCI",1]],"commercialCount":2,"publicCount":1,"errorCount":0},{"name":"생물공학","total":3,"providers":[["KCI",3]],"commercialCount":0,"publicCount":3,"errorCount":0},{"name":"자동차공학","total":3,"providers":[["KCI",2],["DBPIA",1]],"commercialCount":1,"publicCount":2,"errorCount":0},{"name":"섬유공학","total":2,"providers":[["KCI",2]],"commercialCount":0,"publicCount":2,"errorCount":0},{"name":"제어계측공학","total":2,"providers":[["DBPIA",1],["KCI",1]],"commercialCount":1,"publicCount":1,"errorCount":0},{"name":"금속공학","total":2,"providers":[["KISS",1],["KCI",1]],"commercialCount":1,"publicCount":1,"errorCount":0},{"name":"교통공학","total":1,"providers":[["DBPIA",1]],"commercialCount":1,"publicCount":0,"errorCount":0},{"name":"해양공학","total":1,"providers":[["DBPIA",1]],"commercialCount":1,"publicCount":0,"errorCount":0}]},{"name":"예술체육학","total":81,"providers":[["KCI",26],["KISS",20],["DBPIA",15],["earticle",12],["스콜라",7],["코리아스칼라",1]],"commercialCount":55,"publicCount":26,"errorCount":0,"minors":[{"name":"체육","total":21,"providers":[["KCI",8],["DBPIA",5],["earticle",4],["KISS",3],["스콜라",1]],"commercialCount":13,"publicCount":8,"errorCount":0},{"name":"미술","total":17,"providers":[["KCI",6],["DBPIA",6],["스콜라",3],["earticle",1],["KISS",1]],"commercialCount":11,"publicCount":6,"errorCount":0},{"name":"디자인","total":11,"providers":[["KCI",5],["KISS",4],["earticle",1],["DBPIA",1]],"commercialCount":6,"publicCount":5,"errorCount":0},{"name":"기타예술체육","total":8,"providers":[["KISS",4],["KCI",3],["earticle",1]],"commercialCount":5,"publicCount":3,"errorCount":0},{"name":"음악학","total":7,"providers":[["KISS",2],["스콜라",2],["코리아스칼라",1],["KCI",1],["earticle",1]],"commercialCount":6,"publicCount":1,"errorCount":0},{"name":"예술일반","total":5,"providers":[["KCI",2],["earticle",2],["DBPIA",1]],"commercialCount":3,"publicCount":2,"errorCount":0},{"name":"연극","total":3,"providers":[["KISS",2],["earticle",1]],"commercialCount":3,"publicCount":0,"errorCount":0},{"name":"미용","total":3,"providers":[["KISS",1],["earticle",1],["KCI",1]],"commercialCount":2,"publicCount":1,"errorCount":0},{"name":"영화","total":2,"providers":[["DBPIA",2]],"commercialCount":2,"publicCount":0,"errorCount":0},{"name":"의상","total":2,"providers":[["KISS",2]],"commercialCount":2,"publicCount":0,"errorCount":0},{"name":"무용","total":2,"providers":[["스콜라",1],["KISS",1]],"commercialCount":2,"publicCount":0,"errorCount":0}]},{"name":"자연과학","total":76,"providers":[["KCI",33],["DBPIA",15],["ScienceON",9],["KISS",7],["스콜라",5],["earticle",4],["코리아스칼라",3]],"commercialCount":34,"publicCount":42,"errorCount":0,"minors":[{"name":"생물학","total":16,"providers":[["KCI",7],["ScienceON",5],["DBPIA",3],["스콜라",1]],"commercialCount":4,"publicCount":12,"errorCount":0},{"name":"생활과학","total":16,"providers":[["KCI",9],["KISS",4],["DBPIA",2],["스콜라",1]],"commercialCount":7,"publicCount":9,"errorCount":0},{"name":"자연과학일반","total":9,"providers":[["earticle",4],["KCI",2],["코리아스칼라",1],["스콜라",1],["KISS",1]],"commercialCount":7,"publicCount":2,"errorCount":0},{"name":"물리학","total":6,"providers":[["KCI",3],["DBPIA",2],["ScienceON",1]],"commercialCount":2,"publicCount":4,"errorCount":0},{"name":"수학","total":5,"providers":[["KCI",2],["스콜라",1],["ScienceON",1],["DBPIA",1]],"commercialCount":2,"publicCount":3,"errorCount":0},{"name":"통계학","total":5,"providers":[["KCI",3],["DBPIA",2]],"commercialCount":2,"publicCount":3,"errorCount":0},{"name":"지구과학","total":4,"providers":[["KCI",2],["DBPIA",1],["스콜라",1]],"commercialCount":2,"publicCount":2,"errorCount":0},{"name":"지질학","total":4,"providers":[["KCI",2],["DBPIA",1],["KISS",1]],"commercialCount":2,"publicCount":2,"errorCount":0},{"name":"천문학","total":3,"providers":[["코리아스칼라",2],["ScienceON",1]],"commercialCount":2,"publicCount":1,"errorCount":0},{"name":"대기과학","total":3,"providers":[["KCI",1],["KISS",1],["DBPIA",1]],"commercialCount":2,"publicCount":1,"errorCount":0},{"name":"기타자연과학","total":2,"providers":[["DBPIA",2]],"commercialCount":2,"publicCount":0,"errorCount":0},{"name":"화학","total":2,"providers":[["KCI",1],["ScienceON",1]],"commercialCount":0,"publicCount":2,"errorCount":0},{"name":"해양학","total":1,"providers":[["KCI",1]],"commercialCount":0,"publicCount":1,"errorCount":0}]},{"name":"복합학","total":67,"providers":[["KCI",26],["스콜라",15],["DBPIA",10],["earticle",5],["KISS",5],["코리아스칼라",3],["ScienceON",3]],"commercialCount":38,"publicCount":29,"errorCount":0,"minors":[{"name":"학제간연구","total":43,"providers":[["KCI",17],["스콜라",11],["DBPIA",6],["KISS",4],["코리아스칼라",2],["earticle",2],["ScienceON",1]],"commercialCount":25,"publicCount":18,"errorCount":0},{"name":"과학기술학","total":8,"providers":[["DBPIA",3],["ScienceON",2],["earticle",2],["KCI",1]],"commercialCount":5,"publicCount":3,"errorCount":0},{"name":"감성과학","total":5,"providers":[["스콜라",1],["코리아스칼라",1],["DBPIA",1],["earticle",1],["KCI",1]],"commercialCount":4,"publicCount":1,"errorCount":0},{"name":"문헌정보학","total":3,"providers":[["KCI",2],["스콜라",1]],"commercialCount":1,"publicCount":2,"errorCount":0},{"name":"기술정책","total":3,"providers":[["KCI",1],["스콜라",1],["KISS",1]],"commercialCount":2,"publicCount":1,"errorCount":0},{"name":"여성학","total":3,"providers":[["KCI",3]],"commercialCount":0,"publicCount":3,"errorCount":0},{"name":"사회과학 &gt; 교육학","total":1,"providers":[["스콜라",1]],"commercialCount":1,"publicCount":0,"errorCount":0},{"name":"뇌과학","total":1,"providers":[["KCI",1]],"commercialCount":0,"publicCount":1,"errorCount":0}]},{"name":"농수해양학","total":49,"providers":[["KCI",23],["DBPIA",9],["KISS",8],["코리아스칼라",4],["스콜라",3],["ScienceON",1],["earticle",1]],"commercialCount":25,"publicCount":24,"errorCount":0,"minors":[{"name":"농학","total":21,"providers":[["KCI",12],["DBPIA",3],["스콜라",2],["KISS",2],["코리아스칼라",1],["earticle",1]],"commercialCount":9,"publicCount":12,"errorCount":0},{"name":"식품과학","total":8,"providers":[["KCI",3],["DBPIA",3],["코리아스칼라",1],["KISS",1]],"commercialCount":5,"publicCount":3,"errorCount":0},{"name":"수산학","total":6,"providers":[["KCI",3],["KISS",2],["DBPIA",1]],"commercialCount":3,"publicCount":3,"errorCount":0},{"name":"축산학","total":6,"providers":[["KCI",3],["ScienceON",1],["스콜라",1],["코리아스칼라",1]],"commercialCount":2,"publicCount":4,"errorCount":0},{"name":"조경학","total":4,"providers":[["KCI",2],["KISS",1],["코리아스칼라",1]],"commercialCount":2,"publicCount":2,"errorCount":0},{"name":"임학","total":3,"providers":[["KISS",2],["DBPIA",1]],"commercialCount":3,"publicCount":0,"errorCount":0},{"name":"해상운송학","total":1,"providers":[["DBPIA",1]],"commercialCount":1,"publicCount":0,"errorCount":0}]},{"name":"미분류","total":1,"providers":[["DBPIA",1]],"commercialCount":1,"publicCount":0,"errorCount":0,"minors":[{"name":"사회과학 &gt; 국제/지역개발","total":1,"providers":[["DBPIA",1]],"commercialCount":1,"publicCount":0,"errorCount":0}]}]};
+const COMMERCIAL = ["DBPIA","KISS","earticle","스콜라","코리아스칼라","교보문고","학지사"];
+const PUBLIC_LIST = ["KCI","ScienceON","RISS","KoreaScience","KoreaMed","기초학문자료센터"];
+const ERRORS = ["NOT_IN_RISS","NO_ARTICLES","ERROR","TRULY_UNKNOWN","UNKNOWN"];
+const COLORS = {
+  'DBPIA':'#e74c3c','KISS':'#3498db','스콜라':'#f39c12','earticle':'#9b59b6',
+  '코리아스칼라':'#e67e22','교보문고':'#d35400','학지사':'#c0392b',
+  'KCI':'#2ecc71','ScienceON':'#1abc9c','RISS':'#27ae60','KoreaMed':'#16a085','KoreaScience':'#0d6efd','기초학문자료센터':'#20c997',
+  'NOT_IN_RISS':'#bdc3c7','NO_ARTICLES':'#95a5a6','ERROR':'#7f8c8d',
+};
+
+// 0. Overview: 대분류별 공개/비공개
+const ov = DATA.overviewData.filter(d => d.total >= 5);
+new Chart(document.getElementById('overviewBar'), {
+  type: 'bar',
+  data: {
+    labels: ov.map(d => d.name + ' (' + d.total + ')'),
+    datasets: [
+      { label: '원문 공개', data: ov.map(d => d.open), backgroundColor: '#2ecc71', borderRadius: 4 },
+      { label: '원문 비공개', data: ov.map(d => d.closed), backgroundColor: '#e74c3c', borderRadius: 4 },
+    ],
+  },
+  options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { x: { stacked: true }, y: { stacked: true } } },
+});
+
+// 1. Provider Doughnut
+const prov = DATA.providerTotals.filter(([p]) => !ERRORS.includes(p));
+new Chart(document.getElementById('providerPie'), {
+  type: 'doughnut',
+  data: { labels: prov.map(([p])=>p), datasets: [{ data: prov.map(([,v])=>v), backgroundColor: prov.map(([p])=>COLORS[p]||'#999'), borderWidth: 2 }] },
+  options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'right', labels: { font: { size: 11 } } } } },
+});
+
+// 2. Category Pie
+let commT=0, pubT=0, errT=0;
+DATA.providerTotals.forEach(([p,v]) => { if(COMMERCIAL.includes(p)) commT+=v; else if(PUBLIC_LIST.includes(p)) pubT+=v; else if(ERRORS.includes(p)) errT+=v; });
+new Chart(document.getElementById('categoryPie'), {
+  type: 'doughnut',
+  data: { labels: ['상업 DB ('+commT+')', '공공/비상업 ('+pubT+')', '확인불가 ('+errT+')'], datasets: [{ data: [commT,pubT,errT], backgroundColor: ['#e74c3c','#2ecc71','#bdc3c7'], borderWidth: 2 }] },
+  options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'right' } } },
+});
+
+// 3. Commercial Bar
+const commDBs = DATA.providerTotals.filter(([p]) => COMMERCIAL.includes(p));
+new Chart(document.getElementById('commercialBar'), {
+  type: 'bar',
+  data: { labels: commDBs.map(([p])=>p), datasets: [{ data: commDBs.map(([,v])=>v), backgroundColor: commDBs.map(([p])=>COLORS[p]), borderRadius: 6 }] },
+  options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } },
+});
+
+// 4. Major Dependency
+const mj = DATA.majorCategories.filter(c => c.total >= 5);
+const mjPct = mj.map(c => { const v = c.total - c.errorCount; return v > 0 ? c.commercialCount / v * 100 : 0; });
+new Chart(document.getElementById('majorDepBar'), {
+  type: 'bar',
+  data: { labels: mj.map(c => c.name + ' (' + c.total + ')'), datasets: [{ label: '상업 DB (%)', data: mjPct, backgroundColor: mjPct.map(v => v > 60 ? '#e74c3c' : v > 40 ? '#f39c12' : '#2ecc71'), borderRadius: 6 }] },
+  options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, max: 100 } } },
+});
+
+// 5. Stacked
+const allProv = ['DBPIA','KISS','스콜라','earticle','코리아스칼라','KCI','ScienceON','RISS','KoreaMed'];
+new Chart(document.getElementById('majorStacked'), {
+  type: 'bar',
+  data: { labels: mj.map(c => c.name), datasets: allProv.map(p => ({
+    label: p, data: mj.map(c => { const e = c.providers.find(([pp]) => pp === p); return e ? e[1] : 0; }), backgroundColor: COLORS[p] || '#999',
+  })) },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }, scales: { x: { stacked: true }, y: { stacked: true } } },
+});
+
+// 6. Major Table
+const tb = document.querySelector('#majorTable tbody');
+mj.forEach(cat => {
+  const valid = cat.total - cat.errorCount;
+  const cp = valid > 0 ? (cat.commercialCount / valid * 100).toFixed(1) : '0.0';
+  const gc = name => { const e = cat.providers.find(([p]) => p === name); return e ? e[1] : 0; };
+  const op = cat.publicCount - gc('KCI');
+  const bg = cp > 60 ? 'high' : cp > 40 ? 'mid' : 'low';
+  const r = document.createElement('tr');
+  r.innerHTML = '<td><b>'+cat.name+'</b></td><td>'+cat.total+'</td><td>'+gc('DBPIA')+'</td><td>'+gc('KISS')+'</td><td>'+gc('스콜라')+'</td><td>'+gc('earticle')+'</td><td>'+gc('코리아스칼라')+'</td><td><b>'+cat.commercialCount+'</b></td><td>'+gc('KCI')+'</td><td>'+op+'</td><td><span class="badge '+bg+'">'+cp+'%</span></td>';
+  tb.appendChild(r);
+});
+
+// 7. Minor Toggle
+const bc = document.getElementById('majorButtons');
+const mc = document.getElementById('minorContent');
+DATA.majorCategories.forEach(cat => {
+  if (cat.minors.length === 0) return;
+  const b = document.createElement('button');
+  b.className = 'toggle-btn';
+  b.textContent = cat.name + ' (' + cat.minors.length + ')';
+  b.onclick = () => {
+    document.querySelectorAll('.toggle-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    let h = '<table><thead><tr><th>소분류</th><th>전체</th>';
+    COMMERCIAL.forEach(db => h += '<th>' + db + '</th>');
+    h += '<th>상업계</th><th>KCI등</th><th>기타</th><th>상업비율</th></tr></thead><tbody>';
+    cat.minors.forEach(m => {
+      const gc = name => { const e = m.providers.find(([p]) => p === name); return e ? e[1] : 0; };
+      const valid = m.total - m.errorCount;
+      const cp = valid > 0 ? (m.commercialCount / valid * 100).toFixed(1) : '0.0';
+      const bg = cp > 60 ? 'high' : cp > 40 ? 'mid' : 'low';
+      h += '<tr><td>' + m.name + '</td><td>' + m.total + '</td>';
+      COMMERCIAL.forEach(db => { const c = gc(db); h += '<td>' + (c || '-') + '</td>'; });
+      h += '<td><b>' + m.commercialCount + '</b></td><td>' + gc('KCI') + '</td><td>' + (m.publicCount - gc('KCI')) + '</td>';
+      h += '<td><span class="badge ' + bg + '">' + cp + '%</span></td></tr>';
+    });
+    h += '</tbody></table>';
+    mc.innerHTML = h;
+  };
+  bc.appendChild(b);
+});
+if (bc.firstChild) bc.firstChild.click();
+
+// 8. Minor Top 40
+const am = [];
+DATA.majorCategories.forEach(cat => {
+  cat.minors.forEach(m => {
+    if (m.total >= 3) {
+      const valid = m.total - m.errorCount;
+      if (valid > 0) am.push({ ...m, major: cat.name, commPct: m.commercialCount / valid * 100 });
+    }
+  });
+});
+am.sort((a, b) => b.commPct - a.commPct);
+const top40 = am.slice(0, 40);
+new Chart(document.getElementById('minorTopBar'), {
+  type: 'bar',
+  data: {
+    labels: top40.map(m => m.name + ' [' + m.major + '] (' + m.total + ')'),
+    datasets: COMMERCIAL.map(db => ({
+      label: db, data: top40.map(m => { const e = m.providers.find(([p]) => p === db); return e ? e[1] : 0; }), backgroundColor: COLORS[db],
+    })),
+  },
+  options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { x: { stacked: true }, y: { stacked: true } } },
+});
+
+// 9. Heatmap
+const hm = document.getElementById('heatmapContent');
+let hh = '<table><thead><tr><th>대분류</th><th>소분류</th><th>전체</th>';
+COMMERCIAL.forEach(db => hh += '<th>' + db + '</th>');
+hh += '<th>상업비율</th></tr></thead><tbody>';
+DATA.majorCategories.forEach(cat => {
+  cat.minors.filter(m => m.total >= 3).sort((a,b) => {
+    const va = a.total - a.errorCount; const vb = b.total - b.errorCount;
+    return (vb>0?b.commercialCount/vb:0) - (va>0?a.commercialCount/va:0);
+  }).forEach(m => {
+    const gc = name => { const e = m.providers.find(([p]) => p === name); return e ? e[1] : 0; };
+    const valid = m.total - m.errorCount;
+    const cp = valid > 0 ? (m.commercialCount / valid * 100).toFixed(1) : '0.0';
+    const bg = cp > 60 ? 'high' : cp > 40 ? 'mid' : 'low';
+    hh += '<tr><td>' + cat.name + '</td><td>' + m.name + '</td><td>' + m.total + '</td>';
+    COMMERCIAL.forEach(db => {
+      const c = gc(db);
+      const pct = m.total > 0 ? c / m.total : 0;
+      const alpha = Math.round(Math.min(pct * 2, 1) * 255).toString(16).padStart(2, '0');
+      const color = COLORS[db] || '#999';
+      hh += '<td style="background:' + color + (c > 0 ? alpha : '00') + '">' + (c || '') + '</td>';
+    });
+    hh += '<td><span class="badge ' + bg + '">' + cp + '%</span></td></tr>';
+  });
+});
+hh += '</tbody></table>';
+hm.innerHTML = hh;
+</script>
+</body>
+</html>
